@@ -116,7 +116,7 @@ class DCGAN(object):
     def discriminator_model(self):
         if self.DM:
             return self.DM
-        optimizer = RMSprop(lr=0.002, decay=6e-8)
+        optimizer = RMSprop(lr=0.0002, decay=6e-5)
         self.DM = Sequential()
         self.DM.add(self.discriminator())
         self.DM.compile(loss='binary_crossentropy', optimizer=optimizer,
@@ -126,7 +126,7 @@ class DCGAN(object):
     def adversarial_model(self):
         if self.AM:
             return self.AM
-        optimizer = RMSprop(lr=0.001, decay=3e-8)
+        optimizer = RMSprop(lr=0.0001, decay=3e-5)
         self.AM = Sequential()
         self.AM.add(self.generator())
         self.AM.add(self.discriminator())
@@ -150,7 +150,7 @@ class MNIST_DCGAN(object):
         self.adversarial = self.DCGAN.adversarial_model()
         self.generator = self.DCGAN.generator()
 
-    def train(self, train_steps=2000, batch_size=256, save_interval=10):
+    def train(self, train_steps=500, batch_size=256, save_interval=100):
         noise_input = None
         if save_interval>0:
             noise_input = np.random.uniform(-1.0, 1.0, size=[16, 100])
@@ -204,7 +204,7 @@ class MNIST_DCGAN(object):
 if __name__ == '__main__':
     mnist_dcgan = MNIST_DCGAN()
     timer = ElapsedTimer()
-    mnist_dcgan.train(train_steps=10000, batch_size=256, save_interval=100)
+    mnist_dcgan.train(train_steps=10000, batch_size=256, save_interval=10)
     timer.elapsed_time()
     mnist_dcgan.plot_images(fake=True)
     mnist_dcgan.plot_images(fake=False, save2file=True)
